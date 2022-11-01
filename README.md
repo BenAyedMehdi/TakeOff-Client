@@ -21,7 +21,7 @@ The application is hosted on Netlify and can be accessed at [https://takeoffapp.
 To install the application, run the following commands:
 
 ```bash
-git clone
+git clone https://github.com/BenAyedMehdi/TakeOff-Client.git
 cd takeoff
 npm install
 ```
