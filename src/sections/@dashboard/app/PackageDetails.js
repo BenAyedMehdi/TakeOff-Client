@@ -61,14 +61,14 @@ export default function PackageDetails({ title, total, icon, color = 'primary', 
       </StyledIcon>
 
       
-      <Typography variant="h3">Pro</Typography>
+      <Typography variant="h3">Startup kit</Typography>
 
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         Weekly analytics & many tools for your company!
       </Typography>
       
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        $139 / month
+        $99 / month
       </Typography>
     </Card>
   );

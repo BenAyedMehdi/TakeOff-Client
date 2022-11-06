@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box, Link, Container, Typography, Divider, Stack, Button } from '@mui/material';
-
+import AddCompanyForm from '../sections/auth/add-company/AddCompanyForm';
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // components
 import Logo from '../components/logo';
 import Iconify from '../components/iconify';
 // sections
-import { LoginForm } from '../sections/auth/login';
+import { RegisterForm } from '../sections/auth/register';
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +17,8 @@ const StyledRoot = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
     display: 'flex',
   },
+  margin: 0,
+  padding: 0,
 }));
 
 const StyledSection = styled('div')(({ theme }) => ({
@@ -42,62 +43,44 @@ const StyledContent = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
+export default function AddCompanyPage() {
   const mdUp = useResponsive('up', 'md');
-  
 
   return (
     <>
       <Helmet>
-        <title> Login - TakeOff </title>
+        <title> Add company - TakeOff </title>
       </Helmet>
 
       <StyledRoot>
-        
         {mdUp && (
           <StyledSection>
             <Box>
               <Logo dest="/home" />
             </Box>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome Back
+              Hi, Welcome back
             </Typography>
-            <img src="/assets/illustrations/illustration_login.png" alt="login" />
+            <img src="/assets/illustrations/addcompany.png" alt="login" />
           </StyledSection>
         )}
 
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
-              Sign in to TakeOff
+              Add your company
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 5 }}>
-              Don’t have an account? {''}
-              <Link href='register' variant="subtitle2">Get started</Link>
+              Already have a company registred? {''}
+              <Link href="login" variant="subtitle2">
+                Login
+              </Link>
             </Typography>
 
-            <Stack direction="row" spacing={2}>
-              <Button fullWidth size="large" color="inherit" variant="outlined">
-                <Iconify icon="eva:google-fill" color="#DF3E30" width={22} height={22} />
-              </Button>
+           
 
-              <Button fullWidth size="large" color="inherit" variant="outlined">
-                <Iconify icon="eva:facebook-fill" color="#1877F2" width={22} height={22} />
-              </Button>
-
-              <Button fullWidth size="large" color="inherit" variant="outlined">
-                <Iconify icon="eva:twitter-fill" color="#1C9CEA" width={22} height={22} />
-              </Button>
-            </Stack>
-
-            <Divider sx={{ my: 3 }}>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                OR
-              </Typography>
-            </Divider>
-
-            <LoginForm  />
+            <AddCompanyForm />
           </StyledContent>
         </Container>
       </StyledRoot>

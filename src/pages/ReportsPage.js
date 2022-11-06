@@ -315,7 +315,7 @@ export default function ReportsPage() {
                   </Box>
 
                   <Button target="_blank" variant="contained">
-                    Upgrade to Premium
+                    Upgrade to Gold
                   </Button>
                 </Stack>
               </Box>

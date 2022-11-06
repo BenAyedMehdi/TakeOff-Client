@@ -5,11 +5,11 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { Box, Link } from '@mui/material';
 
-import newLogo from '../../assets/images/takeoff.png';
+import newLogo from '../../assets/images/takeoffbrand.png';
 
 // ----------------------------------------------------------------------
 
-const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
+const Logo = forwardRef(({ dest='/', disabledLink = false, sx, ...other }, ref) => {
   const theme = useTheme();
 
   const PRIMARY_LIGHT = theme.palette.primary.light;
@@ -77,12 +77,11 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
   );
 
   if (disabledLink) {
-    <img src={newLogo} alt="Berry" width="100" />
+    <img src={newLogo} alt="Berry" width="100" />;
   }
 
   return (
-    <Link to="/" component={RouterLink} sx={{ display: 'contents' }}>
-      
+    <Link to={dest} component={RouterLink} sx={{ display: 'contents' }}>
       <img src={newLogo} alt="Berry" width="100" />
     </Link>
   );

@@ -1,54 +1,38 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
 import { Grid, Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import apiCalls from '../../../api/apiCalls';
 // components
 import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]);
-  const [user, setUser] = useState("");
-  const [email, setEmail] = useState('');
+
   const [showPassword, setShowPassword] = useState(false);
 
-  useEffect(() => {
-    const getUsers = async () => {
-      const usersFromServer = await apiCalls.GetAllUsers();
-      setUsers(usersFromServer);
-      console.log(usersFromServer);
-    };
-    getUsers();
-  }, []);
-
-
   const handleClick = () => {
-    const tmpUser = users.filter(u=> u.email === email)[0];
-    console.log(tmpUser.company)
-    setUser(tmpUser);
-    localStorage.setItem("user", JSON.stringify(tmpUser));
-    
-    if(tmpUser){
-      if(tmpUser.company === null){
-        navigate('/add-company', { replace: true });
-      }else{
-        navigate('/dashboard', { replace: true });
-      }
-    }
+    navigate('/add-company', { replace: true });
   };
 
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" onChange={(e) => setEmail(e.target.value)} />
 
+        <Grid container>
+          <Grid item xs={12} md={6} lg={6}>
+            <TextField name="firstName" label="First name" />
+          </Grid>
+          <Grid item xs={12} md={6} lg={6}>
+            <TextField name="lastName" label="Last name" />
+          </Grid>
+        </Grid>
+        <TextField name="email" label="Email address" />
         <TextField
           name="password"
-          label="Password (optional)"
+          label="Password"
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -70,7 +54,7 @@ export default function LoginForm() {
       </Stack>
 
       <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
-        Login
+        Register
       </LoadingButton>
     </>
   );

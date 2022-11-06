@@ -6,6 +6,7 @@ import SimpleLayout from './layouts/simple';
 import BlogPage from './pages/BlogPage';
 import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import Page404 from './pages/Page404';
 import AllProductsPage from './pages/AllProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
@@ -13,6 +14,8 @@ import MilestonesPage from './pages/MilestonesPage';
 import ReportsPage from './pages/ReportsPage';
 import CompaniesPage from './pages/CompaniesPage';
 import AnalyticsPage from './pages/AnalyticsPage';
+import HomePage from './pages/HomePage';
+import AddCompanyPage from './pages/AddCompanyPage';
 
 // ----------------------------------------------------------------------
 
@@ -35,8 +38,20 @@ export default function Router() {
       ],
     },
     {
+      path: 'home',
+      element: <HomePage />,
+    },
+    {
       path: 'login',
       element: <LoginPage />,
+    },
+    {
+      path: 'register',
+      element: <RegisterPage/>,
+    },
+    {
+      path: 'add-company',
+      element: <AddCompanyPage/>,
     },
     {
       element: <SimpleLayout />,

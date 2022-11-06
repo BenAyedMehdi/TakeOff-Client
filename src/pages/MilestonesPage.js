@@ -1,9 +1,11 @@
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { faker } from '@faker-js/faker';
 import { sample } from 'lodash';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Card, CardHeader, CardContent, Box, Stack, Button, Grid, Container, Typography } from '@mui/material';
+import apiCalls from '../api/apiCalls';
 // components
 import Iconify from '../components/iconify';
 // sections
@@ -19,37 +21,61 @@ import {
   AppConversionRates,
 } from '../sections/@dashboard/app';
 import { ProductList } from '../sections/@dashboard/products';
-import newLogo from '../assets/images/takeoffbig.png';
 
 const PRODUCT_COLOR = ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', '#FF4842', '#1890FF', '#94D82D', '#FFC107'];
 
 // ----------------------------------------------------------------------
 
-const PRODUCTS = [...Array(4)].map((_, index) => {
-  const setIndex = index + 1;
-
-  return {
-    id: faker.datatype.uuid(),
-    cover: `/assets/images/covers/cover_${setIndex + 20}.jpg`,
-    name: faker.company.catchPhrase(),
-    company: 'My company',
-    price: faker.datatype.number({ min: 4, max: 99, precision: 0.01 }),
-    priceSale: setIndex % 3 ? null : faker.datatype.number({ min: 19, max: 29, precision: 0.01 }),
-    colors:
-      (setIndex === 1 && PRODUCT_COLOR.slice(0, 2)) ||
-      (setIndex === 2 && PRODUCT_COLOR.slice(1, 3)) ||
-      (setIndex === 3 && PRODUCT_COLOR.slice(2, 4)) ||
-      (setIndex === 4 && PRODUCT_COLOR.slice(3, 6)) ||
-      (setIndex === 23 && PRODUCT_COLOR.slice(4, 6)) ||
-      (setIndex === 24 && PRODUCT_COLOR.slice(5, 6)) ||
-      PRODUCT_COLOR,
-    status: sample(['sale', 'new', '', '']),
-  };
-});
 // ----------------------------------------------------------------------
 
 export default function MilestonesPage() {
   const theme = useTheme();
+  const [milestones, setMilestones] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem('user');
+    const initialValue = JSON.parse(saved);
+    return initialValue || '';
+  });
+
+  useEffect(() => {
+    const getMilestones = async () => {
+      const milestonesFromServer = await apiCalls.GetCompanyMilestones(user.company.companyId);
+      setMilestones(milestonesFromServer);
+      console.log('milestones', milestonesFromServer);
+    };
+    getMilestones();
+
+    const getProducts = async () => {
+      const productsFromServer = await apiCalls.GetCompanyProducts(user.company.companyId);
+      setProducts(productsFromServer);
+      console.log('Products', productsFromServer);
+    };
+    getProducts();
+  }, []);
+
+  const PRODUCTS = products.map((p, index) => {
+    const setIndex = index + 1;
+
+    return {
+      id: p.productId,
+      cover: `/assets/images/covers/cover_${setIndex + 20}.jpg`,
+      name: p.productName,
+      company: user.company.companyName,
+      price: p.price,
+      priceSale: setIndex % 3 ? null : faker.datatype.number({ min: 19, max: 29, precision: 0.01 }),
+      colors:
+        (setIndex === 1 && PRODUCT_COLOR.slice(0, 2)) ||
+        (setIndex === 2 && PRODUCT_COLOR.slice(1, 3)) ||
+        (setIndex === 3 && PRODUCT_COLOR.slice(2, 4)) ||
+        (setIndex === 4 && PRODUCT_COLOR.slice(3, 6)) ||
+        (setIndex === 23 && PRODUCT_COLOR.slice(4, 6)) ||
+        (setIndex === 24 && PRODUCT_COLOR.slice(5, 6)) ||
+        PRODUCT_COLOR,
+      status: sample(['sale', 'new', '', '']),
+    };
+  });
 
   return (
     <>
@@ -126,7 +152,7 @@ export default function MilestonesPage() {
                     </Box>
 
                     <Button target="_blank" variant="contained">
-                      Upgrade to Premium
+                      Upgrade to Gold
                     </Button>
                   </Stack>
                 </Box>
@@ -135,7 +161,11 @@ export default function MilestonesPage() {
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
             <Card>
-              <CardHeader title="My products" />
+              <CardHeader title="My products" action={
+                <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+                New Product
+              </Button>
+              }/>
               <CardContent>
                 <ProductList products={PRODUCTS} />
               </CardContent>
