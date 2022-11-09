@@ -1,7 +1,8 @@
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
 // @mui
 import { Container, Stack, Typography } from '@mui/material';
+import apiCalls from '../api/apiCalls'
 // components
 import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
 // mock
@@ -11,6 +12,44 @@ import PRODUCTS from '../_mock/allProducts';
 
 export default function AllProductsPage() {
   const [openFilter, setOpenFilter] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem('user');
+    const initialValue = JSON.parse(saved);
+    return initialValue || '';
+  });
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const productsFromServer = await apiCalls.GetAllProducts();
+      setProducts(productsFromServer);
+    };
+    getProducts();
+  }, []);
+
+  const GetCompanyNameById = async (id) => {
+    const found = await apiCalls.GetCompanyById(id);
+    return found.compnayName;
+  }; 
+
+   const allProducts = products.map(  (p, index) => {
+    const tmp = PRODUCTS[index];
+    
+    // Company name not working yet
+    /* let companyName = GetCompanyNameById(p.companyId).then(res => {companyName = res});
+     const tmpc = await GetCompanyById(p.companyId)
+    tmpc.then((res) => {
+      companyName = res.compnayName
+    }); 
+    console.log(companyName)
+    */
+    tmp.name = p.productName;
+    tmp.price = p.price;
+    tmp.company = "";
+    console.log('tmp',tmp)  
+    return tmp;
+  })
+
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -42,7 +81,7 @@ export default function AllProductsPage() {
           </Stack>
         </Stack>
 
-        <ProductList products={PRODUCTS} />
+        <ProductList products={allProducts} />
         <ProductCartWidget />
       </Container>
     </>

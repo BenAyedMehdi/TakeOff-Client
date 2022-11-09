@@ -35,7 +35,6 @@ export default function CompaniesPage() {
       // console.log('companies', companiesFromServer);
     };
     getCompanies();
-
   }, []);
 
   const allCompanies = companies.map((c, index) => {

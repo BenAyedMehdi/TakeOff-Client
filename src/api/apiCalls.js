@@ -38,6 +38,11 @@ export default class apiCalls{
         return res.data
     }
     
+    static async GetCompanyById(id){
+        const res = await axios.get(`https://findyourwayapi.azurewebsites.net/api/Companies/${id}`, id)
+        .catch(e=> console.log(e))
+        return res.data
+    }
 
     static async GetCompanyMilestones(id){
         const res = await axios.get(`https://findyourwayapi.azurewebsites.net/api/Milestones/${id}`, id)

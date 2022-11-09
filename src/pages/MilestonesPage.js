@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { faker } from '@faker-js/faker';
 import { sample } from 'lodash';
@@ -6,8 +7,9 @@ import { sample } from 'lodash';
 import { useTheme } from '@mui/material/styles';
 import { Card, CardHeader, CardContent, Box, Stack, Button, Grid, Container, Typography } from '@mui/material';
 import apiCalls from '../api/apiCalls';
-// components
-import Iconify from '../components/iconify';
+import AddProductDialog from '../components/dialog/AddProductDialog';
+  // components
+  import Iconify from '../components/iconify';
 // sections
 import {
   AppTasks,
@@ -29,6 +31,7 @@ const PRODUCT_COLOR = ['#00AB55', '#000000', '#FFFFFF', '#FFC0CB', '#FF4842', '#
 // ----------------------------------------------------------------------
 
 export default function MilestonesPage() {
+  const navigate = useNavigate();
   const theme = useTheme();
   const [milestones, setMilestones] = useState([]);
   const [products, setProducts] = useState([]);
@@ -40,6 +43,9 @@ export default function MilestonesPage() {
   });
 
   useEffect(() => {
+    if (user === '') {
+      navigate('/home', { replace: true });
+    }
     const getMilestones = async () => {
       const milestonesFromServer = await apiCalls.GetCompanyMilestones(user.company.companyId);
       setMilestones(milestonesFromServer);
@@ -92,9 +98,9 @@ export default function MilestonesPage() {
           <Grid item xs={12} md={6} lg={8}>
             <AppNewsUpdate
               title="My milestones"
-              list={[...Array(5)].map((_, index) => ({
+              list={[...Array(milestones.length)].map((_, index) => ({
                 id: faker.datatype.uuid(),
-                title: faker.company.bs(),
+                title: milestones[index].milestoneName,
                 description: '',
                 image: `/assets/images/covers/cover_${index + 1}.jpg`,
                 postedAt: faker.date.recent(),
@@ -161,12 +167,16 @@ export default function MilestonesPage() {
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
             <Card>
-              <CardHeader title="My products" action={
-                <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                New Product
-              </Button>
-              }/>
+              <CardHeader
+                title="My products"
+                action={
+                  <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+                    New Product
+                  </Button>
+                }
+              />
               <CardContent>
+                <AddProductDialog />
                 <ProductList products={PRODUCTS} />
               </CardContent>
             </Card>
