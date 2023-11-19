@@ -13,7 +13,7 @@ import Select from '@mui/material/Select';
 import apiCalls from '../../api/apiCalls';
 import Iconify from '../iconify';
 
-export default function FormDialog() {
+export default function FormDialog({user}) {
   const [categories, setCategories] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [choice, setChoice] = React.useState(1);
@@ -41,16 +41,22 @@ export default function FormDialog() {
     setChoice(event.target.value);
   };  
   
-  const submit = () => {
+  const submit = async () => {
     const product = {
-        
+      "productName": name,
+      "description": description,
+      "price": price,
+      "categoryId": choice,
+      "companyId": user.company.companyId
     }
+    const responseAddProduct = await apiCalls.AddProduct(product);
+    setOpen(false);
   };
 
   return (
     <div>
       <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleClickOpen}>
-        Open form dialog
+        New Product
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add product</DialogTitle>
@@ -72,11 +78,11 @@ export default function FormDialog() {
               }}
             >
               {categories.map((category) => (
-                <MenuItem value={category.categoryId}>{category.categoryName}</MenuItem>
+                <MenuItem key={category.categoryId} value={category.categoryId}>{category.categoryName}</MenuItem>
               ))}
             </Select>
             <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={submit}>
-              Add product
+              Add product 
             </LoadingButton>
           </Stack>
         </DialogContent>

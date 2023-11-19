@@ -170,13 +170,10 @@ export default function MilestonesPage() {
               <CardHeader
                 title="My products"
                 action={
-                  <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                    New Product
-                  </Button>
+                  <AddProductDialog user={user} />
                 }
               />
               <CardContent>
-                <AddProductDialog />
                 <ProductList products={PRODUCTS} />
               </CardContent>
             </Card>
